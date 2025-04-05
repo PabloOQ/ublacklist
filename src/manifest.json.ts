@@ -55,11 +55,25 @@ export default {
             run_at: runAt,
           })),
         )
-      : SEARCH_ENGINES.google.contentScripts.map(({ matches, runAt }) => ({
+      : {
           js: ["scripts/content-script.js"],
-          matches,
-          run_at: runAt,
-        })),
+          matches: [
+            ...new Set(
+              Object.values(SEARCH_ENGINES).flatMap(({ contentScripts }) =>
+                contentScripts.flatMap(({ matches }) => matches)
+              )
+            ).map((match) => {
+              const parsed = parseMatchPattern(match);
+              if (!parsed) {
+                throw new Error(`Invalid match pattern: ${match}`);
+              }
+              return parsed.allURLs
+                ? "<all_urls>"
+                : `${parsed.scheme}://${parsed.host}/*`;
+            }),
+          ],
+          run_at: "document_start", // or any other appropriate value
+        },
 
   default_locale: "en",
 

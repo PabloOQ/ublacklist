@@ -56,12 +56,12 @@ export default {
           })),
         )
       : Object.values(SEARCH_ENGINES).flatMap(({ contentScripts }) =>
-        contentScripts.map(({ matches, runAt }) => ({
-          js: ["scripts/content-script.js"],
-          matches: matches, // Use all matches from each search engine
-          run_at: runAt,
-        })),
-      ),
+          contentScripts.map(({ matches, runAt }) => ({
+            js: ["scripts/content-script.js"],
+            matches: matches, // Use all matches from each search engine
+            run_at: runAt,
+          })),
+        ),
 
   default_locale: "en",
 
